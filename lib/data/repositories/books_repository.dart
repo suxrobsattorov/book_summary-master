@@ -1,3 +1,5 @@
+import 'package:book_summary/data/repositories/auth_repository.dart';
+
 import '../models/book.dart';
 import '../services/firebase_book_service.dart';
 
@@ -7,8 +9,8 @@ class BooksRepository {
   BooksRepository({required FirebaseBookService firebaseBookService})
       : _firebaseBookService = firebaseBookService;
 
-  Stream<List<Book>> getBooks() {
-    return _firebaseBookService.getBooks();
+  Stream<List<Book>> getBooks(AuthRepository authRepository) {
+    return _firebaseBookService.getBooks(authRepository);
   }
 
   Future<String> addBook(Book book) async {

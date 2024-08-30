@@ -1,19 +1,24 @@
+import 'package:book_summary/data/repositories/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/book.dart';
 import '../../../data/repositories/books_repository.dart';
 
 part 'books_event.dart';
+
 part 'books_state.dart';
 
 class BooksBloc extends Bloc<BooksEvent, BooksState> {
   final BooksRepository _booksRepository;
+  final AuthRepository _authRepository;
 
-  BooksBloc({required BooksRepository booksRepository})
+  BooksBloc(
+      {required BooksRepository booksRepository,
+      required AuthRepository authRepository})
       : _booksRepository = booksRepository,
+        _authRepository = authRepository,
         super(InitialBookState()) {
     on<GetBooksEvent>(_getBooks);
-    on<AddBookEvent>(_addBook);
     on<EditBookEvent>(_editBook);
     on<DeleteBookEvent>(_deleteBook);
     on<ToggleBookFavoriteEvent>(_toggleBookFavorite);
@@ -24,21 +29,11 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
     emit(LoadingBookState());
     try {
       await emit.forEach(
-        _booksRepository.getBooks(),
+        _booksRepository.getBooks(_authRepository),
         onData: (List<Book> books) {
           return LoadedBookState(books);
         },
       );
-    } catch (e) {
-      emit(ErrorBookState(e.toString()));
-    }
-  }
-
-  void _addBook(AddBookEvent event, Emitter<BooksState> emit) async {
-    emit(LoadingBookState());
-    try {
-      await _booksRepository.addBook(event.book);
-      emit(InitialBookState());
     } catch (e) {
       emit(ErrorBookState(e.toString()));
     }
@@ -76,9 +71,9 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
   }
 
   void _bookRate(
-      BookRateEvent event,
-      Emitter<BooksState> emit,
-      ) async {
+    BookRateEvent event,
+    Emitter<BooksState> emit,
+  ) async {
     emit(LoadingBookState());
     try {
       await _booksRepository.bookRate(event.id, event.rate);

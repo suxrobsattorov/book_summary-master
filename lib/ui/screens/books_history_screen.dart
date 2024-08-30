@@ -1,16 +1,16 @@
+import 'package:book_summary/ui/screens/summary_history_screen.dart';
+import 'package:book_summary/ui/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/utils/night_day.dart';
 import '../../core/utils/texts.dart';
-import '../../data/models/book.dart';
 import '../../logic/blocs/books/books_bloc.dart';
-import 'summary_history_screen.dart';
 
-class SavedBooksScreen extends StatelessWidget {
-  const SavedBooksScreen({super.key});
+class BooksHistoryScreen extends StatelessWidget {
+  const BooksHistoryScreen({super.key});
 
-  static const routeName = '/saved_history';
+  static const routeName = '/history';
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class SavedBooksScreen extends StatelessWidget {
       backgroundColor: NightDay.isNight ? Colors.black : Colors.white,
       appBar: AppBar(
         backgroundColor: NightDay.isNight ? Colors.black : Colors.white,
-        title: Texts.textAppBar('Sevimli kitoblar'),
+        title: Texts.textAppBar('Xulosalar Tarixi'),
         centerTitle: true,
       ),
       body: BlocBuilder<BooksBloc, BooksState>(
@@ -36,20 +36,14 @@ class SavedBooksScreen extends StatelessWidget {
           }
 
           if (state is LoadedBookState) {
-            List<Book> books = [];
-            for (Book b in state.books) {
-              if (b.isFavorite) {
-                books.add(b);
-              }
-            }
-            return books.isEmpty
+            return state.books.isEmpty
                 ? const Center(
-                    child: Text("Sevimli kitoblar mavjud emas"),
+                    child: Text("Kitoblar mavjud emas"),
                   )
                 : ListView.builder(
-                    itemCount: books.length,
+                    itemCount: state.books.length,
                     itemBuilder: (ctx, index) {
-                      final book = books[index];
+                      final book = state.books[index];
                       return Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 3),
@@ -63,9 +57,9 @@ class SavedBooksScreen extends StatelessWidget {
                           child: ListTile(
                             title: Text(book.title),
                             subtitle: Text(book.author),
-                            trailing: const Icon(
-                              Icons.favorite,
-                              color: Colors.redAccent,
+                            leading: const Icon(
+                              Icons.history_edu,
+                              color: Colors.blueGrey,
                             ),
                           ),
                         ),
@@ -75,7 +69,7 @@ class SavedBooksScreen extends StatelessWidget {
           }
 
           return const Center(
-            child: Text("Sevimli kitoblar mavjud emas"),
+            child: Text("Kitoblar mavjud emas"),
           );
         },
       ),

@@ -1,3 +1,4 @@
+import 'package:book_summary/logic/blocs/user/user_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,14 +69,25 @@ void main() async {
           ),
           BlocProvider(create: (ctx) {
             return GenerativeAiBloc(
-                booksRepository: ctx.read<BooksRepository>());
+              booksRepository: ctx.read<BooksRepository>(),
+              authRepository: ctx.read<AuthRepository>(),
+            );
           }),
           BlocProvider(create: (ctx) {
-            return BooksBloc(booksRepository: ctx.read<BooksRepository>());
+            return BooksBloc(
+              booksRepository: ctx.read<BooksRepository>(),
+              authRepository: ctx.read<AuthRepository>(),
+            );
           }),
           BlocProvider(create: (ctx) {
             return AudioPlayerBloc(
               audioRepository: ctx.read<AudioRepository>(),
+            );
+          }),
+          BlocProvider(create: (ctx) {
+            return UserBloc(
+              userRepository: ctx.read<UserRepository>(),
+              authRepository: ctx.read<AuthRepository>(),
             );
           }),
         ],

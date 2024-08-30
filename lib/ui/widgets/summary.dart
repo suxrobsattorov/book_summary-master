@@ -16,10 +16,12 @@ class Summary extends StatelessWidget {
     return BlocBuilder<TranslateBloc, TranslateState>(
       builder: (context, state) {
         if (state is LoadingTranslate) {
-          return Center(
-            child: LoadingAnimationWidget.staggeredDotsWave(
-              color: Colors.green.shade300,
-              size: 70,
+          return Expanded(
+            child: Center(
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                color: Colors.green.shade300,
+                size: 70,
+              ),
             ),
           );
         }

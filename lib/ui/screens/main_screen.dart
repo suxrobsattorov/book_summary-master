@@ -15,6 +15,8 @@ import 'summary_screen.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
+  static const routeName = '/main';
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -46,11 +48,8 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const ProfileScreen(),
-                ),
-              );
+              context.read<UserBloc>().add(GetUserEvent());
+              Navigator.of(context).pushNamed(ProfileScreen.routeName);
             },
             icon: const Icon(
               Icons.account_circle,
@@ -68,13 +67,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: BlocConsumer<GenerativeAiBloc, GenerativeAiStates>(
                   listener: (context, state) {
                     if (state is LoadedGenerativeAiState) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (ctx) {
-                            return const SummaryScreen();
-                          },
-                        ),
-                      );
+                      Navigator.of(context).pushNamed(SummaryScreen.routeName);
                     }
                   },
                   builder: (context, state) {

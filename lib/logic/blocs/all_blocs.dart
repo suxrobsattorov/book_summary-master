@@ -5,3 +5,4 @@ export 'books/books_bloc.dart';
 export 'audio_player/audio_player_bloc.dart';
 export 'auth/auth_bloc.dart';
 export 'translate/translate_bloc.dart';
+export 'user/user_bloc.dart';

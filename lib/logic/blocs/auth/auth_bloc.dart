@@ -73,7 +73,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await userRepository.addUser(
             u.User(
               id: user.uid,
-              fullname: "",
+              name: "",
+              surname: "",
               email: user.email!,
             ),
           );

@@ -6,11 +6,16 @@ import '../models/user.dart';
 class FirebaseUserService {
   final _userCollection = FirebaseFirestore.instance.collection("users");
 
-  Stream<List<User>> getUsers() {
+  Stream<User?> getUser(String userId) {
     return _userCollection.snapshots().map((querySnapshot) {
-      return querySnapshot.docs.map((doc) {
-        return User.fromMap(doc.data());
+      User? user;
+      querySnapshot.docs.map((doc) {
+        if (doc.id == userId) {
+          user = User.fromMap(doc.data(), userId);
+        }
+        return User.fromMap(doc.data(), userId);
       }).toList();
+      return user;
     });
   }
 
@@ -33,17 +38,6 @@ class FirebaseUserService {
   Future<void> deleteUser(String id) async {
     try {
       await _userCollection.doc(id).delete();
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> addBookSummary(String id, Book book) async {
-    try {
-      await _userCollection.doc(id).set(
-        {"history": book},
-        SetOptions(merge: true),
-      );
     } catch (e) {
       rethrow;
     }

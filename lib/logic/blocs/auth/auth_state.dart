@@ -9,7 +9,7 @@ enum AuthStatus {
 }
 
 class AuthState {
-  var formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   bool isLogin;
   TextEditingController? emailController;
   TextEditingController? passwordController;

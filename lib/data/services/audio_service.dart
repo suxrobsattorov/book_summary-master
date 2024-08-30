@@ -21,7 +21,8 @@ class AudioService {
         },
         options: Options(headers: {
           "Authorization":
-              "Bearer 8oAduIeCUREzE1UgSTcoxzF3HaLhbc2q8khfOHhEhuSYXPoZEceq93",
+              "Bearer 0xJaZJjatcd2LJga2q8dQo13wG3MIXiI02OgUkasNiwf2uD032RNHu",
+          //8oAduIeCUREzE1UgSTcoxzF3HaLhbc2q8khfOHhEhuSYXPoZEceq93
           "x-rapidapi-host": "open-ai-text-to-speech1.p.rapidapi.com",
           "Content-Type": "application/json",
         }),
@@ -38,7 +39,6 @@ class AudioService {
 
       return firebaseAudioUrl;
     } on FirebaseException catch (e) {
-      print(e.message);
       throw (e.message ?? 'Unknown Error');
     } on DioException catch (e) {
       throw (e.response!.data);
@@ -54,7 +54,9 @@ class AudioService {
     final uploadTask = path.putData(audioBytes);
 
     uploadTask.snapshotEvents.listen((taskData) {
+      print('**************************************************');
       print(taskData.bytesTransferred / taskData.totalBytes);
+      print('**************************************************');
     });
     await uploadTask.whenComplete(() {});
     return await path.getDownloadURL();

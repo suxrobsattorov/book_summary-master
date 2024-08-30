@@ -1,56 +1,57 @@
 import 'dart:convert';
 
-import 'book.dart';
-
 class User {
   final String id;
-  final String fullname;
+  final String name;
+  final String surname;
   final String email;
 
   User({
     required this.id,
-    required this.fullname,
+    required this.name,
+    required this.surname,
     required this.email,
   });
 
   User copyWith({
     String? id,
-    String? fullname,
+    String? name,
+    String? surname,
     String? email,
-    List<Book>? favoriteBooks,
-    List<Book>? history,
   }) {
     return User(
-      id: id ?? this.id,
-      fullname: fullname ?? this.fullname,
-      email: email ?? this.email
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        surname: surname ?? this.surname,
+        email: email ?? this.email);
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
     // result.addAll({'id': id});
-    result.addAll({'fullname': fullname});
+    result.addAll({'name': name});
+    result.addAll({'surname': surname});
     result.addAll({'email': email});
 
     return result;
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
+  factory User.fromMap(Map<String, dynamic> map, String userId) {
     return User(
-      id: map['id'] ?? '',
-      fullname: map['fullname'] ?? '',
+      id: userId,
+      name: map['name'] ?? '',
+      surname: map['surname'] ?? '',
       email: map['email'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source));
+  // factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'User(id: $id, fullname: $fullname, email: $email)';
+    return 'User(id: $id, name: $name,surname: $surname, email: $email)';
   }
 }

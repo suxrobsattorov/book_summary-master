@@ -1,4 +1,8 @@
+import 'package:book_summary/logic/blocs/user/user_bloc.dart';
 import 'package:book_summary/ui/screens/auth_screen.dart';
+import 'package:book_summary/ui/screens/books_history_screen.dart';
+import 'package:book_summary/ui/screens/edit_profile_screen.dart';
+import 'package:book_summary/ui/screens/saved_books_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,6 +13,8 @@ import '../widgets/list_button_container.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  static const routeName = '/profile';
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +55,55 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    Texts.text16Brown('Name'),
+                    BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if (state is LoadingState) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (state is LoadedState) {
+                          return Texts.text16Brown(state.user.name.isNotEmpty
+                              ? '${state.user.name} ${state.user.surname}'
+                              : 'Name');
+                        }
+                        if (state is LoadingState) {
+                          return const Center(
+                            child: Text('Xatolik sodir bo\'ldi'),
+                          );
+                        }
+                        return const Center(
+                          child: Text('name'),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 30),
-                ListButtonContainer(text: 'Sevimli kitoblar'),
-                ListButtonContainer(text: 'Tarix'),
-                ListButtonContainer(text: 'Profilni sozlash'),
+                InkWell(
+                  onTap: () {
+                    context.read<BooksBloc>().add(GetBooksEvent());
+                    Navigator.of(context).pushNamed(SavedBooksScreen.routeName);
+                  },
+                  child: ListButtonContainer(text: 'Sevimli kitoblar'),
+                ),
+                InkWell(
+                  onTap: () {
+                    context.read<BooksBloc>().add(GetBooksEvent());
+                    Navigator.of(context).pushNamed(BooksHistoryScreen.routeName);
+                  },
+                  child: ListButtonContainer(text: 'Tarix'),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return const EditProfileScreen();
+                      },
+                    ));
+                  },
+                  child: ListButtonContainer(text: 'Profilni sozlash'),
+                ),
               ],
             ),
           ),

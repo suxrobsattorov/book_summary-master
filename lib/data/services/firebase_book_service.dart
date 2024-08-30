@@ -1,3 +1,4 @@
+import 'package:book_summary/data/repositories/auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/book.dart';
@@ -5,17 +6,24 @@ import '../models/book.dart';
 class FirebaseBookService {
   final _bookCollection = FirebaseFirestore.instance.collection("books");
 
-  Stream<List<Book>> getBooks() {
+  Stream<List<Book>> getBooks(AuthRepository authRepository) {
     // birinchi return'da collection ichiga kiryapmiz (table)
     return _bookCollection.snapshots().map((querySnapshot) {
       // ikkinchi return'da collection ichidagi hujjatlarga kiryapmiz (rows)
-      return querySnapshot.docs.map((doc) {
+      List<Book> books = querySnapshot.docs.map((doc) {
         // uchinchi return'da har bitta hujjatni (row)
         // Book obyektiga aylantiryapmiz
         final map = doc.data();
         map['id'] = doc.id;
-        return Book.fromMap(map);
+        return Book.fromMap(map, authRepository.currentUser!.uid);
       }).toList();
+      List<Book> booksByUser = [];
+      for (Book b in books) {
+        if (b.userId == authRepository.currentUser!.uid) {
+          booksByUser.add(b);
+        }
+      }
+      return booksByUser;
     });
   }
 

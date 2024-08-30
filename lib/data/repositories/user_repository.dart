@@ -1,3 +1,5 @@
+import 'package:book_summary/data/models/book.dart';
+
 import '../models/user.dart';
 import '../services/firebase_user_service.dart';
 
@@ -6,8 +8,8 @@ class UserRepository {
 
   UserRepository({required this.firebaseUserService});
 
-  Stream<List<User>> getUsers() {
-    return firebaseUserService.getUsers();
+  Stream<User?> getUser(String userId) {
+    return firebaseUserService.getUser(userId);
   }
 
   Future<void> addUser(User user) async {

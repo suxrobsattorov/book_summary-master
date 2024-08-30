@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:book_summary/core/utils/extensions.dart';
+import 'package:book_summary/data/repositories/auth_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
@@ -11,16 +12,19 @@ import '../../../data/models/book.dart';
 import '../../../data/repositories/books_repository.dart';
 
 part 'events/generative_ai_events.dart';
+
 part 'states/generative_ai_states.dart';
 
 class GenerativeAiBloc extends Bloc<GenerativeAiEvents, GenerativeAiStates> {
   GenerativeAiBloc({
     required this.booksRepository,
+    required this.authRepository,
   }) : super(InitialGenerativeAiState()) {
     on<SummarizeAiEvent>(_summarize);
   }
 
   final BooksRepository booksRepository;
+  final AuthRepository authRepository;
 
   void _summarize(SummarizeAiEvent event, emit) async {
     emit(LoadingGenerativeAiState());
@@ -48,7 +52,8 @@ class GenerativeAiBloc extends Bloc<GenerativeAiEvents, GenerativeAiStates> {
       if (response.text == null) {
         throw ("Xulosa qila olmadim");
       } else {
-        final book = Book.fromJson(response.text!.clearJson);
+        final currentUser = authRepository.currentUser;
+        final book = Book.fromJson(response.text!.clearJson, currentUser!.uid);
         final bookId = await booksRepository.addBook(book);
         book.id = bookId;
         emit(LoadedGenerativeAiState(book));
