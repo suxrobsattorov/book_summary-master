@@ -13,10 +13,6 @@ class BookFavorite extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BooksBloc, BooksState>(
       builder: (context, booksState) {
-        if (booksState is LoadingBookState) {
-          return const CircularProgressIndicator();
-        }
-
         Book currentBook = book;
 
         if (booksState is LoadedBookState) {

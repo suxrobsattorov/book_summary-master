@@ -4,6 +4,7 @@ import 'package:toastification/toastification.dart';
 
 import '../../core/utils/app_dialogs.dart';
 import '../../logic/blocs/auth/auth_bloc.dart';
+import 'main_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -21,6 +22,8 @@ class _AuthScreenState extends State<AuthScreen> {
       listener: (context, state) {
         if (state.status == AuthStatus.loading) {
           AppDialogs.showLoading(context);
+        }else if (state.status == AuthStatus.authenticated) {
+          Navigator.of(context, rootNavigator: true).pushReplacementNamed(MainScreen.routeName);
         } else {
           AppDialogs.hideLoading(context);
           if (state.status == AuthStatus.error) {
@@ -123,13 +126,15 @@ class _AuthScreenState extends State<AuthScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          state.isLogin ? 'Kirish' : 'Ro\'yxatdan o\'tish',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
+                                state.isLogin
+                                    ? 'Kirish'
+                                    : 'Ro\'yxatdan o\'tish',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 38),

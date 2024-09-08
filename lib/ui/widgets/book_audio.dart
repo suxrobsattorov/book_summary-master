@@ -21,7 +21,7 @@ class BookAudio extends StatelessWidget {
               ? const SizedBox()
               : const Text("Audio"),
           icon: audioState is LoadingAudioPlayerState
-              ? const CircularProgressIndicator()
+              ? const CircularProgressIndicator(color: Colors.white)
               : const Icon(Icons.play_arrow),
         );
       },
