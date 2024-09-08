@@ -64,7 +64,6 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
     emit(LoadingBookState());
     try {
       await _booksRepository.toggleBookFavorite(event.id, event.isLike);
-      add(GetBooksEvent());
     } catch (e) {
       emit(ErrorBookState(e.toString()));
     }
@@ -77,7 +76,6 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
     emit(LoadingBookState());
     try {
       await _booksRepository.bookRate(event.id, event.rate);
-      add(GetBooksEvent());
     } catch (e) {
       emit(ErrorBookState(e.toString()));
     }

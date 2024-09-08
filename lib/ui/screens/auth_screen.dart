@@ -23,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
         if (state.status == AuthStatus.loading) {
           AppDialogs.showLoading(context);
         }else if (state.status == AuthStatus.authenticated) {
-          Navigator.of(context, rootNavigator: true).pushReplacementNamed(MainScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
         } else {
           AppDialogs.hideLoading(context);
           if (state.status == AuthStatus.error) {
